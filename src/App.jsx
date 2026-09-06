@@ -23,6 +23,11 @@ function App() {
     setShowCart(false);
   };
 
+  const handleHomeClick = () => {
+    setShowProductList(false);
+    setShowCart(false);
+  };
+
   return (
     <div className="app-container">
       {!showProductList ? (
@@ -45,7 +50,10 @@ function App() {
           </div>
         </div>
       ) : showCart ? (
-        <CartItem onContinueShopping={handleContinueShopping} />
+        <CartItem
+          onContinueShopping={handleContinueShopping}
+          onHomeClick={handleHomeClick}
+        />
       ) : (
         <ProductList onShowCart={handleShowCart} />
       )}
@@ -54,3 +62,4 @@ function App() {
 }
 
 export default App;
+

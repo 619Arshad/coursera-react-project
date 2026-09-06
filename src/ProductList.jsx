@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 
@@ -60,12 +60,8 @@ function ProductList({ onShowCart }) {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
 
-  const [addedItems, setAddedItems] = useState([]);
-
   const handleAddToCart = (product) => {
     dispatch(addItem(product));
-
-    setAddedItems((prev) => [...prev, product.id]);
   };
 
   const totalItems = items.reduce(
@@ -91,28 +87,32 @@ function ProductList({ onShowCart }) {
           <h2>{category.name}</h2>
 
           <div className="products">
-            {category.plants.map((product) => (
-              <div className="product-card" key={product.id}>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  width="200"
-                />
+            {category.plants.map((product) => {
+              const isInCart = items.some(
+                (item) => item.id === product.id
+              );
 
-                <h3>{product.name}</h3>
+              return (
+                <div className="product-card" key={product.id}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    width="200"
+                  />
 
-                <p>${product.price}</p>
+                  <h3>{product.name}</h3>
 
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  disabled={addedItems.includes(product.id)}
-                >
-                  {addedItems.includes(product.id)
-                    ? "Added to Cart"
-                    : "Add to Cart"}
-                </button>
-              </div>
-            ))}
+                  <p>${product.price}</p>
+
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    disabled={isInCart}
+                  >
+                    {isInCart ? "Added to Cart" : "Add to Cart"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}

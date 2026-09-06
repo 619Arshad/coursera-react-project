@@ -2,9 +2,14 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, updateQuantity } from "./CartSlice";
 
-function CartItem({ onContinueShopping }) {
+function CartItem({ onContinueShopping, onHomeClick }) {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
+
+  const totalItems = items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   const handleQuantityChange = (id, quantity) => {
     if (quantity >= 1) {
@@ -27,6 +32,21 @@ function CartItem({ onContinueShopping }) {
 
   return (
     <div className="cart-page">
+      {/* Navbar */}
+      <nav className="navbar">
+        <button onClick={onHomeClick}>
+          🌿 Paradise Nursery
+        </button>
+
+        <button onClick={onContinueShopping}>
+          🏠 Home
+        </button>
+
+        <button>
+          🛒 Cart ({totalItems})
+        </button>
+      </nav>
+
       <h1>Shopping Cart</h1>
 
       {items.length === 0 ? (
