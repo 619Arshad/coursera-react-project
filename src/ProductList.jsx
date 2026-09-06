@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 
 const categories = [
@@ -56,8 +56,10 @@ const categories = [
   },
 ];
 
-function ProductList() {
+function ProductList({ onShowCart }) {
   const dispatch = useDispatch();
+  const items = useSelector((state) => state.cart.items);
+
   const [addedItems, setAddedItems] = useState([]);
 
   const handleAddToCart = (product) => {
@@ -66,10 +68,23 @@ function ProductList() {
     setAddedItems((prev) => [...prev, product.id]);
   };
 
+  const totalItems = items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <div className="product-list">
-      <h1>Paradise Nursery</h1>
-      <h2>Our Plants</h2>
+      <div className="product-header">
+        <div>
+          <h1>Paradise Nursery</h1>
+          <h2>Our Plants</h2>
+        </div>
+
+        <button onClick={onShowCart}>
+          🛒 Cart ({totalItems})
+        </button>
+      </div>
 
       {categories.map((category) => (
         <div className="plant-category" key={category.name}>
@@ -85,6 +100,7 @@ function ProductList() {
                 />
 
                 <h3>{product.name}</h3>
+
                 <p>${product.price}</p>
 
                 <button

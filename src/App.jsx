@@ -1,13 +1,26 @@
 import { useState } from "react";
 import ProductList from "./ProductList";
+import CartItem from "./CartItem";
 import AboutUs from "./components/AboutUs";
 import "./App.css";
 
 function App() {
   const [showProductList, setShowProductList] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   const handleGetStarted = () => {
     setShowProductList(true);
+    setShowCart(false);
+  };
+
+  const handleShowCart = () => {
+    setShowProductList(true);
+    setShowCart(true);
+  };
+
+  const handleContinueShopping = () => {
+    setShowProductList(true);
+    setShowCart(false);
   };
 
   return (
@@ -23,7 +36,7 @@ function App() {
 
             <button
               className="get-started-button"
-              onClick={() => setShowProductList(true)}
+              onClick={handleGetStarted}
             >
               Get Started
             </button>
@@ -31,8 +44,10 @@ function App() {
             <AboutUs />
           </div>
         </div>
+      ) : showCart ? (
+        <CartItem onContinueShopping={handleContinueShopping} />
       ) : (
-        <ProductList />
+        <ProductList onShowCart={handleShowCart} />
       )}
     </div>
   );
